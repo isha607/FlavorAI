@@ -5,5 +5,8 @@
     "express": "^5.2.1",
     "express-rate-limit": "^7.0.0",
     "groq-sdk": "^1.2.1"
+  },
+  "scripts": {
+    "start": "node server.js"
   }
 }
