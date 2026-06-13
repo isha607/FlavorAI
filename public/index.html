@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FlavorAI – AI Recipe Generator</title>
+  <meta name="description" content="AI-powered recipe generator. Enter ingredients, search any dish, get fitness recipes, or find food-based health remedies." />
+  <link rel="icon" type="image/png" href="logo.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="app">
+
+    <!-- ===== SIDEBAR ===== -->
+    <aside class="sidebar">
+      <div class="logo">
+        <img src="logo.png" alt="FlavorAI Logo" class="logo-img" />
+        <span class="logo-text">Flavor<span class="accent">AI</span></span>
+      </div>
+
+      <p class="nav-label">GENERATE</p>
+      <button class="nav-item active" data-tab="generate">
+        <span class="nav-dot" style="background:#3a6cf4;"></span> Generate Recipe
+      </button>
+
+      <p class="nav-label">WELLNESS</p>
+      <button class="nav-item" data-tab="remedy">
+        <span class="nav-dot" style="background:#22c55e;"></span> Remedy Kitchen
+      </button>
+
+      <p class="nav-label">SAVED</p>
+      <button class="nav-item" data-tab="favorites">
+        <span class="nav-dot" style="background:#fb923c;"></span> Favorites
+      </button>
+      <button class="nav-item" data-tab="history">
+        <span class="nav-dot" style="background:#a78bfa;"></span> History
+      </button>
+
+      <p class="nav-label">INFO</p>
+      <button class="nav-item" data-tab="about">
+        <span class="nav-dot" style="background:#94a3b8;"></span> About
+      </button>
+
+      <button id="darkModeToggle" class="theme-toggle">🌙 Dark mode</button>
+    </aside>
+
+    <!-- ===== MAIN ===== -->
+    <main class="main">
+
+      <!-- ══ GENERATE TAB ══ -->
+      <section id="tab-generate" class="tab active">
+        <div class="page-header">
+          <h1>Hello, welcome to FlavorAI 👋</h1>
+          <p>Pick a cuisine, enter ingredients, search a dish by name, or get fitness-optimised recipes.</p>
+        </div>
+
+        <!-- Cuisine quick-cards -->
+        <div class="quick-cards" id="cuisineCards">
+          <div class="quick-card indian" data-cuisine="Indian">
+            <div class="qc-icon-wrap">🍛</div>
+            <div class="qc-info"><b>Indian</b><small>Spices &amp; curries</small></div>
+          </div>
+          <div class="quick-card italian" data-cuisine="Italian">
+            <div class="qc-icon-wrap">🍝</div>
+            <div class="qc-info"><b>Italian</b><small>Pasta &amp; pizza</small></div>
+          </div>
+          <div class="quick-card mexican" data-cuisine="Mexican">
+            <div class="qc-icon-wrap">🌮</div>
+            <div class="qc-info"><b>Mexican</b><small>Bold &amp; spicy</small></div>
+          </div>
+          <div class="quick-card chinese" data-cuisine="Chinese">
+            <div class="qc-icon-wrap">🥢</div>
+            <div class="qc-info"><b>Chinese</b><small>Wok &amp; noodles</small></div>
+          </div>
+          <div class="quick-card mediterranean" data-cuisine="Mediterranean">
+            <div class="qc-icon-wrap">🫒</div>
+            <div class="qc-info"><b>Mediterranean</b><small>Fresh &amp; healthy</small></div>
+          </div>
+        </div>
+
+        <!-- Mode sub-tabs -->
+        <div class="mode-tabs">
+          <button class="mode-tab active" data-mode="ingredients">🧺 By Ingredients</button>
+          <button class="mode-tab" data-mode="search">🔍 Search Dish</button>
+          <button class="mode-tab" data-mode="fitness">💪 Fitness Mode</button>
+        </div>
+
+        <div class="grid-2">
+          <!-- LEFT: form card -->
+          <div class="card form-card">
+
+            <!-- ── By Ingredients ── -->
+            <div id="mode-ingredients" class="mode-panel active">
+              <h3>🧺 Your ingredients</h3>
+              <form id="recipeForm">
+                <label for="ingredients">Ingredients <span class="label-hint">(comma separated)</span></label>
+                <textarea id="ingredients" placeholder="e.g. tomato, onion, garlic, pasta" required></textarea>
+                <p class="default-hint">🧂 <b>salt</b>, 💧 <b>water</b> and 🫙 <b>oil</b> are always included by default</p>
+                <div class="form-row">
+                  <div class="form-group">
+                    <label for="cuisine">Cuisine</label>
+                    <select id="cuisine">
+                      <option value="Any">Any</option>
+                      <option value="Indian">Indian</option>
+                      <option value="Italian">Italian</option>
+                      <option value="Mexican">Mexican</option>
+                      <option value="Chinese">Chinese</option>
+                      <option value="Mediterranean">Mediterranean</option>
+                      <option value="American">American</option>
+                    </select>
+                  </div>
+                  <div class="form-group">
+                    <label for="diet">Diet preference</label>
+                    <select id="diet">
+                      <option value="None">None</option>
+                      <option value="Vegetarian">Vegetarian</option>
+                      <option value="Vegan">Vegan</option>
+                      <option value="Keto">Keto</option>
+                      <option value="Gluten-Free">Gluten-Free</option>
+                    </select>
+                  </div>
+                </div>
+                <button type="submit" id="generateBtn">✨ Generate Recipe</button>
+              </form>
+            </div>
+
+            <!-- ── Search Dish ── -->
+            <div id="mode-search" class="mode-panel">
+              <h3>🔍 Search a Dish</h3>
+              <label for="dishName">Dish name</label>
+              <input id="dishName" type="text" placeholder="e.g. Pav Bhaji, Biryani, Pani Puri, Pasta Carbonara…" />
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="searchCuisine">Cuisine</label>
+                  <select id="searchCuisine">
+                    <option value="Any">Any</option>
+                    <option value="Indian">Indian</option>
+                    <option value="Italian">Italian</option>
+                    <option value="Mexican">Mexican</option>
+                    <option value="Chinese">Chinese</option>
+                    <option value="Mediterranean">Mediterranean</option>
+                    <option value="American">American</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label for="searchDiet">Diet preference</label>
+                  <select id="searchDiet">
+                    <option value="None">None</option>
+                    <option value="Vegetarian">Vegetarian</option>
+                    <option value="Vegan">Vegan</option>
+                    <option value="Keto">Keto</option>
+                    <option value="Gluten-Free">Gluten-Free</option>
+                  </select>
+                </div>
+              </div>
+              <button id="searchDishBtn">🔍 Find Recipe</button>
+            </div>
+
+            <!-- ── Fitness Mode ── -->
+            <div id="mode-fitness" class="mode-panel">
+              <h3>💪 Fitness Recipe</h3>
+              <label>Your Goal</label>
+              <div class="goal-grid">
+                <div class="goal-card selected" data-goal="Muscle Gain">💪 Muscle Gain</div>
+                <div class="goal-card" data-goal="Fat Loss">🔥 Fat Loss</div>
+                <div class="goal-card" data-goal="Endurance">🏃 Endurance</div>
+                <div class="goal-card" data-goal="General Fitness">⚡ General Fitness</div>
+              </div>
+              <div class="form-row" style="margin-top:14px;">
+                <div class="form-group">
+                  <label for="fitnessMeal">Meal Type</label>
+                  <select id="fitnessMeal">
+                    <option>Breakfast</option>
+                    <option>Pre-Workout</option>
+                    <option>Post-Workout</option>
+                    <option>Lunch</option>
+                    <option>Dinner</option>
+                    <option>Snack</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label for="fitnessDiet">Diet</label>
+                  <select id="fitnessDiet">
+                    <option value="None">None</option>
+                    <option value="Vegetarian">Vegetarian</option>
+                    <option value="Vegan">Vegan</option>
+                    <option value="High Protein">High Protein</option>
+                    <option value="Keto">Keto</option>
+                  </select>
+                </div>
+              </div>
+              <label for="fitnessIngredients">Ingredients available <span class="label-hint">(optional)</span></label>
+              <input id="fitnessIngredients" type="text" placeholder="e.g. chicken breast, oats, eggs…" />
+              <button id="fitnessGenerateBtn">💪 Generate Fitness Recipe</button>
+            </div>
+
+            <!-- Shared loading & error -->
+            <div id="loading" class="loading hidden">
+              <div class="spinner"></div>
+              <p>Cooking up something delicious…</p>
+            </div>
+            <div id="errorMsg" class="error hidden"></div>
+          </div>
+
+          <!-- RIGHT: result panel -->
+          <div class="card result-card" id="resultPanel">
+            <h3>Recipe result</h3>
+            <div id="resultEmpty" class="empty-state">
+              <div class="empty-icon">🍽️</div>
+              <p>Your AI-generated recipe will appear here after generation.</p>
+              <small>For best results, list 3–6 ingredients you have on hand.</small>
+            </div>
+
+            <div id="result" class="hidden">
+              <div class="result-header">
+                <h2 id="recipeTitle"></h2>
+                <div class="badges">
+                  <span id="cuisineBadge" class="badge"></span>
+                  <span id="difficultyBadge" class="badge"></span>
+                  <span id="cookTimeBadge" class="badge"></span>
+                </div>
+              </div>
+              <p id="recipeDescription" class="description"></p>
+
+              <div class="section">
+                <h4>🧂 Ingredients</h4>
+                <ul id="ingredientsList"></ul>
+              </div>
+              <div class="section">
+                <h4>👩‍🍳 Steps</h4>
+                <ol id="stepsList"></ol>
+              </div>
+              <div class="section">
+                <h4>📊 Nutrition (per serving)</h4>
+                <table id="nutritionTable"><tbody></tbody></table>
+              </div>
+              <div class="section fun-fact">
+                <h4>💡 Fun Fact</h4>
+                <p id="funFactText"></p>
+              </div>
+              <div id="prepNoteSection" class="section prep-note hidden">
+                <h4>🛒 From scratch or store-bought?</h4>
+                <p id="prepNoteText"></p>
+              </div>
+              <div id="healthySuggestionSection" class="section healthy-suggestion hidden">
+                <h4>🥗 Make it Healthier</h4>
+                <p id="healthySuggestionText"></p>
+              </div>
+              <div class="action-buttons">
+                <button id="copyBtn">📋 Copy Recipe</button>
+                <button id="saveBtn">⭐ Save to Favorites</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Info strip -->
+        <div class="info-strip">
+          <div class="info-box tips">
+            <h4>💡 Tips for better recipes</h4>
+            <p>List the main protein, a vegetable, and at least one spice for the richest AI results.</p>
+          </div>
+          <div class="info-box disclaimer">
+            <h4>⚠️ Disclaimer</h4>
+            <p>Nutrition values are AI-estimated. Always consult a registered dietitian for dietary advice.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ══ REMEDY KITCHEN TAB ══ -->
+      <section id="tab-remedy" class="tab">
+        <div class="page-header">
+          <h1>🏥 Remedy Kitchen</h1>
+          <p>Select a health condition to get a natural, food-based therapeutic recipe.</p>
+        </div>
+
+        <!-- Category headers + cards -->
+        <div class="remedy-category">
+          <h4 class="remedy-cat-label">🦠 Infections &amp; Fever</h4>
+          <div class="remedy-grid">
+            <div class="remedy-card" data-condition="Cold and Fever">
+              <div class="remedy-icon">🤒</div><b>Cold &amp; Fever</b><small>Warm soups, herbal teas</small>
+            </div>
+            <div class="remedy-card" data-condition="Cough and Sore Throat">
+              <div class="remedy-icon">😷</div><b>Cough &amp; Sore Throat</b><small>Kadha, honey ginger</small>
+            </div>
+            <div class="remedy-card" data-condition="Migraine and Headache">
+              <div class="remedy-icon">🤕</div><b>Migraine &amp; Headache</b><small>Magnesium-rich, anti-inflammatory</small>
+            </div>
+            <div class="remedy-card" data-condition="Flu and Body Ache">
+              <div class="remedy-icon">🫀</div><b>Flu &amp; Body Ache</b><small>Turmeric milk, warm broth</small>
+            </div>
+            <div class="remedy-card" data-condition="Sinusitis and Congestion">
+              <div class="remedy-icon">👃</div><b>Sinusitis</b><small>Spiced drinks, steam foods</small>
+            </div>
+          </div>
+        </div>
+
+        <div class="remedy-category">
+          <h4 class="remedy-cat-label">🫀 Heart &amp; Blood</h4>
+          <div class="remedy-grid">
+            <div class="remedy-card" data-condition="Heart Health and Cholesterol">
+              <div class="remedy-icon">❤️</div><b>Heart Health</b><small>Low cholesterol, omega-3</small>
+            </div>
+            <div class="remedy-card" data-condition="High Blood Pressure">
+              <div class="remedy-icon">🩸</div><b>High Blood Pressure</b><small>DASH diet, potassium foods</small>
+            </div>
+            <div class="remedy-card" data-condition="Iron Deficiency and Anemia">
+              <div class="remedy-icon">🫁</div><b>Anemia &amp; Iron</b><small>Iron-rich, vitamin C foods</small>
+            </div>
+            <div class="remedy-card" data-condition="Blood Sugar and Diabetes">
+              <div class="remedy-icon">🩺</div><b>Diabetes</b><small>Low GI, blood sugar foods</small>
+            </div>
+            <div class="remedy-card" data-condition="Thyroid Health">
+              <div class="remedy-icon">🦋</div><b>Thyroid Health</b><small>Iodine &amp; selenium rich foods</small>
+            </div>
+          </div>
+        </div>
+
+        <div class="remedy-category">
+          <h4 class="remedy-cat-label">🦴 Bones &amp; Muscles</h4>
+          <div class="remedy-grid">
+            <div class="remedy-card" data-condition="Knee and Joint Pain">
+              <div class="remedy-icon">🦴</div><b>Knee &amp; Joint Pain</b><small>Calcium &amp; anti-inflammatory</small>
+            </div>
+            <div class="remedy-card" data-condition="Back Pain and Spine Health">
+              <div class="remedy-icon">🏋️</div><b>Back Pain</b><small>Magnesium, anti-spasm foods</small>
+            </div>
+            <div class="remedy-card" data-condition="Muscle Cramps and Weakness">
+              <div class="remedy-icon">💪</div><b>Muscle Cramps</b><small>Electrolyte-rich, potassium</small>
+            </div>
+            <div class="remedy-card" data-condition="Osteoporosis and Bone Density">
+              <div class="remedy-icon">🧬</div><b>Osteoporosis</b><small>Calcium, vitamin D, phosphorus</small>
+            </div>
+          </div>
+        </div>
+
+        <div class="remedy-category">
+          <h4 class="remedy-cat-label">🫄 Gut &amp; Digestion</h4>
+          <div class="remedy-grid">
+            <div class="remedy-card" data-condition="Digestive Issues and Acidity">
+              <div class="remedy-icon">🫄</div><b>Acidity &amp; GERD</b><small>Alkaline, probiotic foods</small>
+            </div>
+            <div class="remedy-card" data-condition="Constipation">
+              <div class="remedy-icon">🌾</div><b>Constipation</b><small>High fibre, hydrating foods</small>
+            </div>
+            <div class="remedy-card" data-condition="Liver Detox and Cleanse">
+              <div class="remedy-icon">🫀</div><b>Liver Detox</b><small>Antioxidant, detox foods</small>
+            </div>
+            <div class="remedy-card" data-condition="Kidney Health and Stones">
+              <div class="remedy-icon">💧</div><b>Kidney Health</b><small>Low oxalate, hydrating foods</small>
+            </div>
+          </div>
+        </div>
+
+        <div class="remedy-category">
+          <h4 class="remedy-cat-label">🧠 Mind &amp; Energy</h4>
+          <div class="remedy-grid">
+            <div class="remedy-card" data-condition="Brain and Memory Boost">
+              <div class="remedy-icon">🧠</div><b>Brain &amp; Memory</b><small>Omega-3, antioxidant foods</small>
+            </div>
+            <div class="remedy-card" data-condition="Sleep and Stress Relief">
+              <div class="remedy-icon">😴</div><b>Sleep &amp; Stress</b><small>Calming, magnesium-rich</small>
+            </div>
+            <div class="remedy-card" data-condition="Anxiety and Depression">
+              <div class="remedy-icon">🌸</div><b>Anxiety &amp; Mood</b><small>Serotonin-boosting foods</small>
+            </div>
+            <div class="remedy-card" data-condition="Fatigue and Low Energy">
+              <div class="remedy-icon">⚡</div><b>Fatigue &amp; Energy</b><small>B-vitamins, iron, complex carbs</small>
+            </div>
+          </div>
+        </div>
+
+        <div class="remedy-category">
+          <h4 class="remedy-cat-label">🌿 Wellness &amp; Lifestyle</h4>
+          <div class="remedy-grid">
+            <div class="remedy-card" data-condition="Immunity Boost">
+              <div class="remedy-icon">🛡️</div><b>Immunity Boost</b><small>Vitamin C, zinc-rich foods</small>
+            </div>
+            <div class="remedy-card" data-condition="Skin and Hair Health">
+              <div class="remedy-icon">✨</div><b>Skin &amp; Hair</b><small>Biotin, collagen-rich foods</small>
+            </div>
+            <div class="remedy-card" data-condition="Weight Loss and Metabolism">
+              <div class="remedy-icon">⚖️</div><b>Weight Loss</b><small>Metabolism-boosting, low-cal</small>
+            </div>
+            <div class="remedy-card" data-condition="PCOS and Hormonal Balance">
+              <div class="remedy-icon">🌺</div><b>PCOS &amp; Hormones</b><small>Anti-androgen, hormone foods</small>
+            </div>
+            <div class="remedy-card" data-condition="Eye Health and Vision">
+              <div class="remedy-icon">👁️</div><b>Eye Health</b><small>Lutein, vitamin A rich foods</small>
+            </div>
+            <div class="remedy-card" data-condition="Vitamin D Deficiency">
+              <div class="remedy-icon">☀️</div><b>Vitamin D</b><small>D3-rich, calcium absorption</small>
+            </div>
+          </div>
+        </div>
+
+        <div id="remedyLoading" class="loading hidden" style="justify-content:center;padding:30px 0;">
+          <div class="spinner"></div>
+          <p>Finding the best remedies for you…</p>
+        </div>
+
+        <div id="remedyErrorMsg" class="error hidden" style="margin-top:16px;"></div>
+
+        <!-- Step 2: 5 suggestion cards -->
+        <div id="remedySuggestionsArea" class="hidden" style="margin-top:20px;">
+          <h3 id="remedySuggestionsTitle" style="font-family:'Poppins',sans-serif;font-size:16px;font-weight:700;margin-bottom:14px;"></h3>
+          <div id="remedySuggestionsList" class="suggestions-grid"></div>
+        </div>
+
+        <!-- Step 3: Full recipe result -->
+        <div id="remedyResultCard" class="card hidden" style="margin-top:20px;">
+          <div class="result-header">
+            <h2 id="r-recipeTitle"></h2>
+            <div class="badges">
+              <span id="r-cuisineBadge" class="badge"></span>
+              <span id="r-difficultyBadge" class="badge"></span>
+              <span id="r-cookTimeBadge" class="badge"></span>
+            </div>
+          </div>
+          <p id="r-recipeDescription" class="description"></p>
+          <div class="grid-2" style="gap:16px;">
+            <div>
+              <div class="section">
+                <h4>🧂 Ingredients</h4>
+                <ul id="r-ingredientsList"></ul>
+              </div>
+              <div class="section">
+                <h4>👩‍🍳 Steps</h4>
+                <ol id="r-stepsList"></ol>
+              </div>
+            </div>
+            <div>
+              <div class="section">
+                <h4>📊 Nutrition (per serving)</h4>
+                <table id="r-nutritionTable"><tbody></tbody></table>
+              </div>
+              <div class="section fun-fact">
+                <h4>💊 Why it helps</h4>
+                <p id="r-funFactText"></p>
+              </div>
+              <div id="r-healthySuggestionSection" class="section healthy-suggestion hidden">
+                <h4>🥗 Boost it further</h4>
+                <p id="r-healthySuggestionText"></p>
+              </div>
+            </div>
+          </div>
+          <div class="action-buttons" style="margin-top:14px;">
+            <button id="r-copyBtn">📋 Copy Recipe</button>
+            <button id="r-saveBtn">⭐ Save to Favorites</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- ══ FAVORITES TAB ══ -->
+      <section id="tab-favorites" class="tab">
+        <div class="page-header">
+          <h1>⭐ Your Favorites</h1>
+          <p>Recipes you've saved for later.</p>
+        </div>
+        <div id="favoritesList" class="card-list"></div>
+      </section>
+
+      <!-- ══ HISTORY TAB ══ -->
+      <section id="tab-history" class="tab">
+        <div class="page-header">
+          <h1>🕑 Recent History</h1>
+          <p>Your last 5 generated recipes.</p>
+        </div>
+        <div id="historyList" class="card-list"></div>
+      </section>
+
+      <!-- ══ ABOUT TAB ══ -->
+      <section id="tab-about" class="tab">
+        <div class="page-header">
+          <h1>ℹ️ About FlavorAI</h1>
+        </div>
+        <div class="card about-card">
+          <p>FlavorAI is an AI-powered recipe generator built with HTML, CSS, JavaScript, Node.js, Express, and the Groq API.</p>
+          <p>Enter the ingredients you have at home, search any dish by name, get fitness-optimised recipes for your gym goals, or find natural food-based remedies for common health conditions — all powered by AI.</p>
+          <p><b>Disclaimer:</b> Nutrition values and health suggestions are AI-estimated approximations. Always consult a registered dietitian or medical professional for personalised advice.</p>
+        </div>
+      </section>
+
+    </main>
+  </div>
+  <script src="script.js"></script>
+</body>
+</html>

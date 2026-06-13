@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AI Recipe Generator</title>
+  <link rel="stylesheet" href="style.css" />
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+</head>
+<body>
+  <div class="container">
+    <h1>AI Recipe Generator</h1>
+    <form id="recipe-form">
+      <label for="ingredients">Enter ingredients (comma separated):</label>
+      <input type="text" id="ingredients" name="ingredients" placeholder="tomato, basil, pasta" required />
+      <button type="submit">Generate Recipe</button>
+    </form>
+    <div id="result" class="result hidden"></div>
+  </div>
+  <script src="script.js"></script>
+</body>
+
+</html>
