@@ -103,7 +103,12 @@ async function requestRecipe({ ingredients = "", cuisine = "Any", diet = "None",
       body: JSON.stringify({ ingredients, cuisine, diet, searchQuery, mode, goal, mealType, condition })
     });
     const data = await res.json();
-    if (!res.ok) throw new Error(data.error || "Something went wrong");
+    if (!res.ok) {
+      if (res.status === 429) {
+        throw new Error("You're generating recipes too quickly! Please wait a minute and try again.");
+      }
+      throw new Error(data.error || "Something went wrong");
+    }
 
     if (isRemedy) {
       currentRemedyRecipe = data;
@@ -270,7 +275,12 @@ document.querySelectorAll(".remedy-card").forEach(card => {
         body: JSON.stringify({ condition: card.dataset.condition })
       });
       const data = await res.json();
-      if (!res.ok) throw new Error(data.error || "Failed");
+      if (!res.ok) {
+        if (res.status === 429) {
+          throw new Error("Too many requests! Please wait a minute before requesting more suggestions.");
+        }
+        throw new Error(data.error || "Failed");
+      }
       renderSuggestions(data.suggestions, card.dataset.condition);
     } catch (err) {
       const errEl = document.getElementById("remedyErrorMsg");
