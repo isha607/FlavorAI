@@ -35,26 +35,26 @@ Turn whatever's in your kitchen into a complete recipe — with nutrition facts,
 
 <div align="center">
 
-### Generate Recipe by Ingredients
-![Recipe Generator - Ingredients Mode](ai-recipe-generator/screenshots/Screenshot%202026-06-14%20000158.png)
+### Homepage
+![Homepage](ai-recipe-generator/screenshots/Screenshot%202026-06-14%20000158.png)
 
-### Search by Dish Name
+### Generate Recipe Result
 ![Search Dish](ai-recipe-generator/screenshots/Screenshot%202026-06-14%20000343.png)
 
-### Remedy Kitchen - Select Health Condition
-![Remedy Kitchen](ai-recipe-generator/screenshots/Screenshot%202026-06-14%20000442.png)
+### Fitness Mode
+![Fitness Mode](ai-recipe-generator/screenshots/Screenshot%202026-06-14%20000442.png)
 
-### Remedy Kitchen - Suggestions
-![Remedy Suggestions](ai-recipe-generator/screenshots/Screenshot%202026-06-14%20000502.png)
+### Feature-2
+![Feature-2](ai-recipe-generator/screenshots/Screenshot%202026-06-14%20000502.png)
 
-### Fitness Mode - Goal Selection
-![Fitness Mode](ai-recipe-generator/screenshots/Screenshot%202026-06-14%20000513.png)
+### Feature-1
+![Feature-1](ai-recipe-generator/screenshots/Screenshot%202026-06-14%20000513.png)
 
-### Generated Recipe Result
-![Recipe Result](ai-recipe-generator/screenshots/Screenshot%202026-06-14%20000526.png)
+###  Remedy Kitchen - Select Health Condition
+![Remedy Section](ai-recipe-generator/screenshots/Screenshot%202026-06-14%20000526.png)
 
-### Favorites & History
-![Favorites & History](ai-recipe-generator/screenshots/Screenshot%202026-06-14%20000540.png)
+### Remedy Results
+![Remedy Results](ai-recipe-generator/screenshots/Screenshot%202026-06-14%20000540.png)
 
 </div>
 
